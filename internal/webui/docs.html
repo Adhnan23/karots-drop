@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>karots-drop — Documentation</title>
+<meta name="description" content="Complete documentation for karots-drop ephemeral sharing tool. CLI reference, REST API, security model, deployment guides, and FAQ.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="/docs">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body data-page="docs">
+<a class="skip-link" href="#main-content">Skip to content</a>
+
+<div class="container">
+  <header>
+    <div class="logo-area">
+      <h1>karots-drop</h1>
+      <span class="subtitle">ephemeral sharing</span>
+    </div>
+    <div class="header-actions">
+      <button class="theme-toggle" type="button" aria-label="Toggle theme">&#9728;</button>
+    </div>
+  </header>
+
+  <nav aria-label="Main navigation">
+    <a href="/">Text</a>
+    <a href="/file">File</a>
+    <a href="/retrieve">Retrieve</a>
+    <a href="/docs">Docs</a>
+  </nav>
+
+  <main id="main-content">
+    <h2 class="page-title">Documentation</h2>
+
+    <div class="docs-section">
+      <h2>Overview</h2>
+      <p>karots-drop is an ephemeral text and file sharing tool. Data is stored in-memory with a configurable TTL and a 6-digit code. No database, no persistence, no accounts. Share from the CLI or the Web UI &mdash; recipients retrieve data with a simple code.</p>
+    </div>
+
+    <div class="docs-section">
+      <h2>CLI Reference</h2>
+
+      <h3>serve</h3>
+      <p>Start the HTTP server.</p>
+      <pre><code>karots-drop serve [flags]</code></pre>
+      <table>
+        <thead><tr><th>Flag</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>--addr</code></td><td><code>:8080</code></td><td>Listen address and port</td></tr>
+          <tr><td><code>--bind</code></td><td><code>""</code></td><td>Bind to interface (<code>localhost</code> restricts to 127.0.0.1)</td></tr>
+          <tr><td><code>--token</code></td><td><code>""</code></td><td>API token for <code>X-Auth-Token</code> header</td></tr>
+          <tr><td><code>--rate-limit</code></td><td><code>60</code></td><td>Max requests per minute per IP (<code>0</code> = unlimited)</td></tr>
+          <tr><td><code>--max-items</code></td><td><code>500</code></td><td>Max items in store (<code>0</code> = unlimited)</td></tr>
+          <tr><td><code>--delete-on-retrieve</code></td><td><code>false</code></td><td>Delete items immediately after retrieval</td></tr>
+          <tr><td><code>--ttl</code></td><td><code>20m</code></td><td>Item TTL (e.g. <code>5m</code>, <code>30m</code>, <code>1h</code>)</td></tr>
+        </tbody>
+      </table>
+
+      <h3>send</h3>
+      <p>Upload text, a file, or piped data.</p>
+      <pre><code>karots-drop send [flags] "text"
+echo "hello" | karots-drop send
+karots-drop send --file photo.jpg
+karots-drop send --encrypt "secret"
+karots-drop send --ttl 5m "short-lived"
+karots-drop send --compact "data"</code></pre>
+      <table>
+        <thead><tr><th>Flag</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>--file</code></td><td><code>""</code></td><td>Path to a file to upload</td></tr>
+          <tr><td><code>--server</code></td><td><code>http://localhost:8080</code></td><td>Server URL</td></tr>
+          <tr><td><code>--encrypt</code></td><td><code>false</code></td><td>Encrypt with AES-256-GCM before upload</td></tr>
+          <tr><td><code>--qr</code></td><td><code>false</code></td><td>Display QR code in terminal</td></tr>
+          <tr><td><code>--json</code></td><td><code>false</code></td><td>JSON output</td></tr>
+          <tr><td><code>--ttl</code></td><td><code>""</code></td><td>Request custom TTL (capped at server max)</td></tr>
+          <tr><td><code>--compact</code></td><td><code>false</code></td><td>Output only the code (scripting)</td></tr>
+        </tbody>
+      </table>
+
+      <h3>get</h3>
+      <p>Retrieve data by its 6-digit code.</p>
+      <pre><code>karots-drop get [flags] &lt;code&gt;
+karots-drop get 482910 --json
+karots-drop get 482910 --key "a1b2c3...base64..."</code></pre>
+
+      <h3>clip</h3>
+      <p>Upload clipboard content (Linux, requires <code>xclip</code> or <code>xsel</code>).</p>
+      <pre><code>karots-drop clip
+karots-drop clip --encrypt
+karots-drop clip --watch</code></pre>
+
+      <h3>version &amp; health</h3>
+      <pre><code>karots-drop version
+karots-drop health</code></pre>
+
+      <h3>completion</h3>
+      <pre><code>source &lt;(karots-drop completion)</code></pre>
+    </div>
+
+    <div class="docs-section">
+      <h2>REST API</h2>
+
+      <h3>POST /api/store</h3>
+      <p>Upload text or a file. Accepts <code>multipart/form-data</code> or raw body.</p>
+      <pre><code>curl -X POST -d "hello world" http://localhost:8080/api/store
+curl -X POST -F "text=hello" http://localhost:8080/api/store
+curl -X POST -F "file=@photo.jpg" http://localhost:8080/api/store
+curl -X POST -F "text=hello" -F "ttl=5m" http://localhost:8080/api/store</code></pre>
+      <p>Response <code>201 Created</code>:</p>
+      <pre><code>{
+  "code": "482910",
+  "ttl": 1200,
+  "url": "http://localhost:8080/api/get/482910",
+  "filename": "photo.jpg",
+  "encrypted": false
+}</code></pre>
+
+      <h3>GET /api/get/{code}</h3>
+      <p>Retrieve stored data by code. Returns raw bytes with original Content-Type. When <code>--delete-on-retrieve</code> is enabled, the item is deleted after reading.</p>
+      <pre><code>curl http://localhost:8080/api/get/482910</code></pre>
+
+      <h3>GET /api/qr/{code}</h3>
+      <p>Returns a 256x256 PNG QR code encoding the retrieval URL.</p>
+      <pre><code>curl -o qr.png http://localhost:8080/api/qr/482910</code></pre>
+
+      <h3>GET /api/health</h3>
+      <p>Health check. Returns <code>{"status":"ok"}</code>. Exempt from auth.</p>
+      <pre><code>curl http://localhost:8080/api/health</code></pre>
+
+      <h3>Error Responses</h3>
+      <table>
+        <thead><tr><th>Status</th><th>Condition</th></tr></thead>
+        <tbody>
+          <tr><td><code>400</code></td><td>Empty body, missing code, upload too large</td></tr>
+          <tr><td><code>401</code></td><td>Missing or invalid token</td></tr>
+          <tr><td><code>404</code></td><td>Code not found or expired</td></tr>
+          <tr><td><code>429</code></td><td>Rate limit exceeded</td></tr>
+          <tr><td><code>503</code></td><td>Store is full</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="docs-section">
+      <h2>Security Model</h2>
+      <ul>
+        <li><strong>Data at rest:</strong> In-memory only, no persistence to disk</li>
+        <li><strong>Data in transit:</strong> No built-in TLS &mdash; deploy behind Caddy or nginx for HTTPS</li>
+        <li><strong>Encryption:</strong> Optional AES-256-GCM, client-side key (zero-knowledge)</li>
+        <li><strong>Access control:</strong> Optional <code>--token</code> flag. Web UI reads token from <code>?token=</code> query param</li>
+        <li><strong>Upload limit:</strong> 20 MB per item</li>
+        <li><strong>TTL:</strong> Configurable (default 20 min), enforced server-side</li>
+        <li><strong>Rate limiting:</strong> Per-IP sliding window (default 60 req/min)</li>
+        <li><strong>Store capacity:</strong> Configurable max items (default 500)</li>
+        <li><strong>Restart:</strong> All data lost on restart (by design)</li>
+      </ul>
+    </div>
+
+    <div class="docs-section">
+      <h2>Deployment</h2>
+
+      <h3>Docker</h3>
+      <pre><code>docker build -t karots-drop .
+docker run -d -p 8080:8080 karots-drop serve \
+  --addr :8080 --token "$TOKEN" --rate-limit 30 \
+  --max-items 200 --ttl 10m --delete-on-retrieve</code></pre>
+
+      <h3>systemd</h3>
+      <pre><code>[Unit]
+Description=karots-drop
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/karots-drop serve --addr :8080 --ttl 30m
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target</code></pre>
+
+      <h3>Build from source</h3>
+      <pre><code>make build
+make build VERSION=1.0.0
+make test
+make clean</code></pre>
+    </div>
+
+    <div class="docs-section">
+      <h2>FAQ</h2>
+
+      <h3>Why not use a database?</h3>
+      <p>By design: no persistence across restarts means no files to manage, no backup concerns, no stale data cleanup. The TTL handles expiry automatically.</p>
+
+      <h3>How are codes generated?</h3>
+      <p><code>crypto/rand</code> picks 6 decimal digits. If there's a collision (extremely rare), the server retries up to 100 times.</p>
+
+      <h3>How does delete-on-retrieve work?</h3>
+      <p>The item is removed immediately after reading. A second GET for the same code returns 404.</p>
+
+      <h3>Can I use custom TTL per upload?</h3>
+      <p>Yes. Clients can request a shorter TTL with <code>karots-drop send --ttl 5m</code> or the <code>ttl</code> form field. The server caps it at its own maximum.</p>
+
+      <h3>How do I get just the code for scripting?</h3>
+      <p>Use <code>karots-drop send --compact "data"</code> &mdash; it prints only the 6-digit code.</p>
+
+      <h3>Is there TLS support?</h3>
+      <p>Not built-in. Deploy behind Caddy, nginx, or a Cloudflare Tunnel for HTTPS.</p>
+    </div>
+  </main>
+</div>
+
+<footer>
+  <p>karots-drop by <a href="https://github.com/Adhnan23">Karots</a> &mdash; <a href="/">Home</a> &mdash; <a href="https://github.com/Adhnan23/karots-drop">GitHub</a></p>
+</footer>
+
+<script src="/static/script.js"></script>
+</body>
+</html>

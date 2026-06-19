@@ -1,0 +1,697 @@
+:root {
+  --bg: #0f1117;
+  --bg-card: #161b22;
+  --bg-hover: #1c2333;
+  --border: #30363d;
+  --text: #e1e4e8;
+  --text-muted: #8b949e;
+  --text-heading: #f0f6fc;
+  --accent: #58a6ff;
+  --accent-fg: #fff;
+  --success: #238636;
+  --success-hover: #2ea043;
+  --danger: #da3633;
+  --warning: #d29922;
+  --btn-sec-bg: #21262d;
+  --btn-sec-hover: #30363d;
+  --btn-sec-border: #30363d;
+  --modal-overlay: rgba(0,0,0,0.7);
+  --nav-hover: rgba(255,255,255,0.06);
+  --code-bg: #1c2333;
+}
+
+[data-theme="light"] {
+  --bg: #ffffff;
+  --bg-card: #f6f8fa;
+  --bg-hover: #e8ecf0;
+  --border: #d0d7de;
+  --text: #1f2328;
+  --text-muted: #656d76;
+  --text-heading: #1f2328;
+  --accent: #0969da;
+  --accent-fg: #fff;
+  --success: #1a7f37;
+  --success-hover: #2da44e;
+  --danger: #cf222e;
+  --warning: #9a6700;
+  --btn-sec-bg: #f6f8fa;
+  --btn-sec-hover: #e8ecf0;
+  --btn-sec-border: #d0d7de;
+  --modal-overlay: rgba(0,0,0,0.3);
+  --nav-hover: rgba(0,0,0,0.04);
+  --code-bg: #e8ecf0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 1rem;
+  transition: background 0.2s, color 0.2s;
+}
+
+/* Skip to content */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: var(--accent-fg);
+  padding: 0.5rem 1rem;
+  border-radius: 0 0 6px 6px;
+  z-index: 200;
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: 720px;
+}
+
+/* Header */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 0 0.5rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+
+.logo-area {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.logo-area h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-heading);
+}
+
+.logo-area .subtitle {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Theme toggle */
+.theme-toggle {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.4rem 0.5rem;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: background 0.15s, border-color 0.15s;
+  touch-action: manipulation;
+  width: 2.2rem;
+  height: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-toggle:hover {
+  background: var(--nav-hover);
+  border-color: var(--text-muted);
+}
+
+/* Navigation */
+nav {
+  display: flex;
+  gap: 0;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border);
+}
+
+nav a {
+  padding: 0.6rem 1.2rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.15s, border-color 0.15s;
+  touch-action: manipulation;
+}
+
+nav a:hover {
+  color: var(--text);
+}
+
+nav a[aria-current="page"] {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+nav a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+  border-radius: 2px;
+}
+
+/* Main content */
+main {
+  min-height: 50vh;
+}
+
+/* Page title */
+.page-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: 1rem;
+}
+
+/* Cards */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+/* Textarea */
+textarea {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 0.85rem;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+textarea:focus {
+  border-color: var(--accent);
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: 0.6rem 1.4rem;
+  margin-top: 0.75rem;
+  background: var(--success);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+  touch-action: manipulation;
+}
+
+.btn:hover {
+  background: var(--success-hover);
+}
+
+.btn:disabled {
+  background: var(--btn-sec-bg);
+  color: var(--text-muted);
+  cursor: not-allowed;
+  border: 1px solid var(--border);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Secondary button */
+.btn-sec {
+  display: inline-block;
+  padding: 0.6rem 1.4rem;
+  margin-top: 0.75rem;
+  background: var(--btn-sec-bg);
+  color: var(--text);
+  border: 1px solid var(--btn-sec-border);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  touch-action: manipulation;
+}
+
+.btn-sec:hover {
+  background: var(--btn-sec-hover);
+  border-color: var(--text-muted);
+}
+
+.btn-sec:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Drop zone */
+.drop-zone {
+  border: 2px dashed var(--border);
+  border-radius: 8px;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.drop-zone:hover,
+.drop-zone.drag-over {
+  border-color: var(--accent);
+  background: var(--bg-hover);
+}
+
+.drop-zone input[type="file"] {
+  display: none;
+}
+
+/* Code input row */
+.code-input-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.paste-btn {
+  padding: 0.6rem 0.8rem;
+  background: var(--btn-sec-bg);
+  border: 1px solid var(--btn-sec-border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 0.8rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s;
+  touch-action: manipulation;
+}
+
+.paste-btn:hover {
+  background: var(--btn-sec-hover);
+  border-color: var(--text-muted);
+}
+
+.paste-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+#code-input {
+  flex: 1;
+  padding: 0.6rem 0.75rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 1.25rem;
+  font-family: "SF Mono", "Fira Code", monospace;
+  letter-spacing: 0.3em;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+#code-input:focus {
+  border-color: var(--accent);
+}
+
+/* Results */
+.result {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  word-break: break-all;
+}
+
+.result.hidden {
+  display: none;
+}
+
+.result.success {
+  border-color: var(--success);
+}
+
+.result.error {
+  border-color: var(--danger);
+}
+
+/* Content display */
+.content-display {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  max-height: 400px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.content-display.hidden {
+  display: none;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: var(--modal-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  position: relative;
+}
+
+.modal-content h2 {
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  color: var(--text-heading);
+}
+
+.modal-content img {
+  max-width: 256px;
+  height: auto;
+  margin: 0 auto 1rem;
+}
+
+.close {
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-muted);
+  line-height: 1;
+  touch-action: manipulation;
+  background: none;
+  border: none;
+  padding: 0.25rem;
+}
+
+.close:hover {
+  color: var(--text);
+}
+
+.close:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.url-display {
+  color: var(--accent);
+  font-size: 0.85rem;
+  word-break: break-all;
+}
+
+.code-display {
+  margin-top: 0.5rem;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--text-heading);
+}
+
+/* Copy buttons */
+.copy-row {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 0.75rem;
+}
+
+.copy-btn {
+  padding: 0.4rem 0.8rem;
+  background: var(--btn-sec-bg);
+  border: 1px solid var(--btn-sec-border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.15s;
+  touch-action: manipulation;
+}
+
+.copy-btn:hover {
+  background: var(--btn-sec-hover);
+}
+
+.copy-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Docs page */
+.docs-section {
+  margin-bottom: 2rem;
+}
+
+.docs-section h2 {
+  font-size: 1.15rem;
+  color: var(--text-heading);
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.docs-section h3 {
+  font-size: 1rem;
+  color: var(--text-heading);
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.docs-section p {
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+}
+
+.docs-section ul,
+.docs-section ol {
+  margin-bottom: 0.75rem;
+  padding-left: 1.5rem;
+  line-height: 1.6;
+}
+
+.docs-section li {
+  margin-bottom: 0.25rem;
+}
+
+.docs-section code {
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 0.85em;
+  background: var(--code-bg);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+}
+
+.docs-section pre {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.docs-section pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+.docs-section table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+}
+
+.docs-section th,
+.docs-section td {
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+.docs-section th {
+  background: var(--bg-card);
+  color: var(--text-heading);
+  font-weight: 600;
+}
+
+.docs-section .endpoint {
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.docs-section a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.docs-section a:hover {
+  text-decoration: underline;
+}
+
+/* Footer */
+footer {
+  margin-top: 3rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  width: 100%;
+  max-width: 720px;
+}
+
+footer a {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+footer a:hover {
+  color: var(--text);
+}
+
+/* Focus visible for all interactive elements */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* Mobile responsive */
+@media (max-width: 600px) {
+  body {
+    padding: 0 0.5rem;
+  }
+
+  header {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .logo-area {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .logo-area h1 {
+    font-size: 1.25rem;
+  }
+
+  .logo-area .subtitle {
+    display: none;
+  }
+
+  nav {
+    flex-wrap: wrap;
+  }
+
+  nav a {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.8rem;
+    flex: 1;
+    text-align: center;
+  }
+
+  #code-input {
+    font-size: 1rem;
+    letter-spacing: 0.15em;
+  }
+
+  .code-input-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .code-input-row .btn,
+  .code-input-row .btn-sec,
+  .code-input-row .paste-btn {
+    margin-top: 0;
+    width: 100%;
+  }
+
+  .drop-zone {
+    padding: 1.5rem 1rem;
+  }
+
+  .modal-content {
+    padding: 1.5rem;
+    width: 95%;
+  }
+
+  .modal-content img {
+    max-width: 200px;
+  }
+
+  .code-display {
+    font-size: 1.5rem;
+  }
+
+  textarea {
+    font-size: 0.8rem;
+  }
+
+  .btn,
+  .btn-sec {
+    width: 100%;
+    text-align: center;
+    padding: 0.75rem;
+  }
+}

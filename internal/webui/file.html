@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>karots-drop — Upload a File</title>
+<meta name="description" content="Share files ephemerally. Drag and drop or select a file to upload. No accounts, no database, automatic expiration.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="/file">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body data-page="file">
+<a class="skip-link" href="#main-content">Skip to content</a>
+
+<div class="container">
+  <header>
+    <div class="logo-area">
+      <h1>karots-drop</h1>
+      <span class="subtitle">ephemeral sharing</span>
+    </div>
+    <div class="header-actions">
+      <button class="theme-toggle" type="button" aria-label="Toggle theme">&#9728;</button>
+    </div>
+  </header>
+
+  <nav aria-label="Main navigation">
+    <a href="/">Text</a>
+    <a href="/file">File</a>
+    <a href="/retrieve">Retrieve</a>
+    <a href="/docs">Docs</a>
+  </nav>
+
+  <main id="main-content">
+    <h2 class="page-title">Share a File</h2>
+    <div class="card">
+      <div class="drop-zone" id="drop-zone" role="button" tabindex="0" aria-label="Click or drag a file to upload">
+        <p>Drag &amp; drop a file here, or click to select</p>
+        <input type="file" id="file-input" aria-label="Choose a file to upload">
+      </div>
+      <button id="upload-file-btn" class="btn" disabled>Upload File</button>
+      <div id="file-result" class="result hidden" role="status" aria-live="polite"></div>
+    </div>
+  </main>
+</div>
+
+<footer>
+  <p>karots-drop by <a href="https://github.com/Adhnan23">Karots</a> &mdash; <a href="/docs">Documentation</a> &mdash; <a href="https://github.com/Adhnan23/karots-drop">GitHub</a></p>
+</footer>
+
+<div id="qr-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="qr-modal-title" aria-hidden="true">
+  <div class="modal-content">
+    <button class="close" aria-label="Close">&times;</button>
+    <h2 id="qr-modal-title">Share</h2>
+    <img id="qr-image" src="" alt="">
+    <p id="qr-url" class="url-display"></p>
+    <div class="copy-row">
+      <button class="copy-btn" data-copy="code">Copy Code</button>
+      <button class="copy-btn" data-copy="url">Copy URL</button>
+    </div>
+    <p id="qr-code" class="code-display"></p>
+  </div>
+</div>
+
+<script src="/static/script.js"></script>
+</body>
+</html>

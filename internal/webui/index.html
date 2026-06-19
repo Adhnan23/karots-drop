@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>karots-drop — Ephemeral Text &amp; File Sharing</title>
+<meta name="description" content="Share text and files ephemerally via CLI or Web UI. Data is encrypted in-memory with configurable TTL and a 6-digit code. No accounts, no database.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="/">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body data-page="text">
+<a class="skip-link" href="#main-content">Skip to content</a>
+
+<div class="container">
+  <header>
+    <div class="logo-area">
+      <h1>karots-drop</h1>
+      <span class="subtitle">ephemeral sharing</span>
+    </div>
+    <div class="header-actions">
+      <button class="theme-toggle" type="button" aria-label="Toggle theme">&#9728;</button>
+    </div>
+  </header>
+
+  <nav aria-label="Main navigation">
+    <a href="/">Text</a>
+    <a href="/file">File</a>
+    <a href="/retrieve">Retrieve</a>
+    <a href="/docs">Docs</a>
+  </nav>
+
+  <main id="main-content">
+    <h2 class="page-title">Share Text</h2>
+    <div class="card">
+      <label for="text-input" class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">Text to share</label>
+      <textarea id="text-input" placeholder="Paste or type your text here..." rows="8" aria-describedby="text-hint"></textarea>
+      <p id="text-hint" style="font-size:0.8rem;color:var(--text-muted);margin-top:0.4rem;">Press Ctrl+Enter to submit</p>
+      <button id="upload-text-btn" class="btn">Upload Text</button>
+      <div id="text-result" class="result hidden" role="status" aria-live="polite"></div>
+    </div>
+  </main>
+</div>
+
+<footer>
+  <p>karots-drop by <a href="https://github.com/Adhnan23">Karots</a> &mdash; <a href="/docs">Documentation</a> &mdash; <a href="https://github.com/Adhnan23/karots-drop">GitHub</a></p>
+</footer>
+
+<div id="qr-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="qr-modal-title" aria-hidden="true">
+  <div class="modal-content">
+    <button class="close" aria-label="Close">&times;</button>
+    <h2 id="qr-modal-title">Share</h2>
+    <img id="qr-image" src="" alt="">
+    <p id="qr-url" class="url-display"></p>
+    <div class="copy-row">
+      <button class="copy-btn" data-copy="code">Copy Code</button>
+      <button class="copy-btn" data-copy="url">Copy URL</button>
+    </div>
+    <p id="qr-code" class="code-display"></p>
+  </div>
+</div>
+
+<script src="/static/script.js"></script>
+</body>
+</html>

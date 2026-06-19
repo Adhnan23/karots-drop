@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>karots-drop — Retrieve Shared Data</title>
+<meta name="description" content="Retrieve shared text or files using a 6-digit code. Paste from clipboard, enter the code, and access your data instantly.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="/retrieve">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body data-page="retrieve">
+<a class="skip-link" href="#main-content">Skip to content</a>
+
+<div class="container">
+  <header>
+    <div class="logo-area">
+      <h1>karots-drop</h1>
+      <span class="subtitle">ephemeral sharing</span>
+    </div>
+    <div class="header-actions">
+      <button class="theme-toggle" type="button" aria-label="Toggle theme">&#9728;</button>
+    </div>
+  </header>
+
+  <nav aria-label="Main navigation">
+    <a href="/">Text</a>
+    <a href="/file">File</a>
+    <a href="/retrieve">Retrieve</a>
+    <a href="/docs">Docs</a>
+  </nav>
+
+  <main id="main-content">
+    <h2 class="page-title">Retrieve Data</h2>
+    <div class="card">
+      <div class="code-input-row">
+        <label for="code-input" class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">6-digit code</label>
+        <input type="text" id="code-input" inputmode="numeric" autocomplete="off" placeholder="Enter 6-digit code" maxlength="6" pattern="[0-9]{6}" aria-describedby="code-hint">
+        <button id="paste-btn" class="paste-btn" title="Paste from clipboard" aria-label="Paste code from clipboard">Paste</button>
+        <button id="retrieve-btn" class="btn">Retrieve</button>
+      </div>
+      <p id="code-hint" style="font-size:0.8rem;color:var(--text-muted);margin-top:0.4rem;">Press Enter to retrieve</p>
+      <div id="retrieve-result" class="result hidden" role="status" aria-live="polite"></div>
+      <pre id="retrieve-content" class="content-display hidden"></pre>
+    </div>
+  </main>
+</div>
+
+<footer>
+  <p>karots-drop by <a href="https://github.com/Adhnan23">Karots</a> &mdash; <a href="/docs">Documentation</a> &mdash; <a href="https://github.com/Adhnan23/karots-drop">GitHub</a></p>
+</footer>
+
+<script src="/static/script.js"></script>
+</body>
+</html>
